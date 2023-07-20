@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "corrust_lib",
+    "corrust_ui_app"
+]
