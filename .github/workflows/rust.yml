@@ -17,10 +17,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
+      working-directory: ./corrust_ui_app
       run: cargo build --release
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v2
       with:
+        working-directory: ./corrust_ui_app
         name: ${{ env.PROJECT_NAME_UNDERSCORE }}
         path: target/release/${{ env.PROJECT_NAME_UNDERSCORE }}
   build-windows:
@@ -30,9 +32,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
+      working-directory: ./corrust_ui_app
       run: cargo build --release
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v2
       with:
+        working-directory: ./corrust_ui_app
         name: ${{ env.PROJECT_NAME_UNDERSCORE }}
         path: target/release/${{ env.PROJECT_NAME_UNDERSCORE }}
