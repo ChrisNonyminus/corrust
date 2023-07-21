@@ -10,35 +10,20 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build-linux:
-
+  release:
+    name: release ${{ matrix.target }}
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [x86_64-pc-windows-gnu, x86_64-unknown-linux-musl]
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      working-directory: ./corrust_ui_app
-      run: ❯ |-
-             sudo apt-get install -y librust-atk-dev atk-dev
-             cargo build --release
-    - name: 'Upload Artifact'
-      uses: actions/upload-artifact@v2
-      with:
-        working-directory: ./corrust_ui_app
-        name: ${{ env.PROJECT_NAME_UNDERSCORE }}
-        path: target/release/${{ env.PROJECT_NAME_UNDERSCORE }}
-  build-windows:
-
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      working-directory: ./corrust_ui_app
-      run: cargo build --release
-    - name: 'Upload Artifact'
-      uses: actions/upload-artifact@v2
-      with:
-        working-directory: ./corrust_ui_app
-        name: ${{ env.PROJECT_NAME_UNDERSCORE }}
-        path: target/release/${{ env.PROJECT_NAME_UNDERSCORE }}
+      - uses: actions/checkout@master
+      - working-directory: ./corrust_ui_app
+      - name: Compile and release
+        uses: rust-build/rust-build.action@v1.4.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          RUSTTARGET: ${{ matrix.target }}
+          EXTRA_FILES: "README.md LICENSE"
